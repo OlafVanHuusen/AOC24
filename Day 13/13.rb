@@ -21,9 +21,7 @@ def calculateMinimalTokensPaid(matrix)
 end
 
 def findBestSolutions(ax, ay, bx, by, px, py)
-  temp1 = BigDecimal(bx) * BigDecimal(py) - BigDecimal(by) * BigDecimal(px)
-  temp2 = BigDecimal(bx) * BigDecimal(ay) - BigDecimal(by) * BigDecimal(ax)
-  ca = BigDecimal(temp1) / BigDecimal(temp2)
+  ca = (BigDecimal(bx) * BigDecimal(py) - BigDecimal(by) * BigDecimal(px)) / (BigDecimal(bx) * BigDecimal(ay) - BigDecimal(by) * BigDecimal(ax))
   cb = (BigDecimal(px) - BigDecimal(ax) * ca) / BigDecimal(bx)
   if ca.frac.zero? && cb.frac.zero?
     (ca * 3 + cb).to_i
