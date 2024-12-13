@@ -1,8 +1,7 @@
-require 'pycall/import'
-include PyCall::Import
+require 'BigDecimal'
 
 def main
-  matrix = parse_input('Day 13/testinput.txt')
+  matrix = parse_input('Day 13/input.txt')
   puts calculateMinimalTokensPaid(matrix)
 
   #PART 2
@@ -16,62 +15,21 @@ end
 def calculateMinimalTokensPaid(matrix)
   total = 0
   matrix.each do |machine|
-    total += calculateMinimalTokensPaidMachine(machine)
+    total += findBestSolutions(machine[0][0], machine[0][1], machine[1][0], machine[1][1], machine[2][0], machine[2][1])
   end
   total
 end
 
-def calculateMinimalTokensPaidMachine(machine)
-  button_a = machine[0]
-  button_b = machine[1]
-  prize = machine[2]
-  x1 = button_a[0]
-  y1 = button_a[1]
-  x2 = button_b[0]
-  y2 = button_b[1]
-  z1 = prize[0]
-  z2 = prize[1]
-  solution = findBestSolutions(x1, y1, x2, y2, z1, z2)
-end
-
-def findAllSolutions(x1, y1, x2, y2, z1, z2)
-  solutions = []
-  # Find all solutions for the equation system x1a + x2b = z1 ; y1a + y2b = z2
-  solutions = findSolutionsDiophantine(x1, y1, x2, y2, z1, z2)
-  solutions
-end
-
-def findBestSolutions(x1, y1, x2, y2, z1, z2)
-  pyexec <<-PYTHON
-    from tqdm import tqdm
-    from ortools.linear_solver import pywraplp
-    def calc():
-      with open("C://Users//lclic//RubymineProjects//AOC24//Day 13//input.txt", "r") as file:
-          game = [g.splitlines() for g in file.read().split("\n\n") if g]
-      part2 = 1
-      total, big = 0, 1e13
-      for g in tqdm(game):
-          xa, ya = map(lambda x: int(x.split("+")[1]), g[0].split(", "))
-          xb, yb = map(lambda x: int(x.split("+")[1]), g[1].split(", "))
-          gx, gy = map(lambda x: int(x.split("=")[1]), g[2].split(", "))
-          solver = pywraplp.Solver.CreateSolver('SCIP')
-          if not solver:
-              print('Solver not created!')
-              exit()
-          a, b = solver.IntVar(0.0, solver.infinity(), 'a'), solver.IntVar(0.0, solver.infinity(), 'b')
-          solver.Minimize(3 * a + b)
-          solver.Add(a * xa + b * xb == gx + part2 * big)
-          solver.Add(a * ya + b * yb == gy + part2 * big)
-          if solver.Solve() == pywraplp.Solver.OPTIMAL:
-              total += solver.Objective().Value()
-
-      print(total)
-    if __name__ == '__main__':
-      calc()
-    PYTHON
-
-  solve_diophantine = PyCall.import_module('__main__').method(:solve_diophantine)
-  solve_diophantine.(x1, y1, x2, y2, z1, z2)
+def findBestSolutions(ax, ay, bx, by, px, py)
+  temp1 = BigDecimal(bx) * BigDecimal(py) - BigDecimal(by) * BigDecimal(px)
+  temp2 = BigDecimal(bx) * BigDecimal(ay) - BigDecimal(by) * BigDecimal(ax)
+  ca = BigDecimal(temp1) / BigDecimal(temp2)
+  cb = (BigDecimal(px) - BigDecimal(ax) * ca) / BigDecimal(bx)
+  if ca.frac.zero? && cb.frac.zero?
+    (ca * 3 + cb).to_i
+  else
+    0
+  end
 end
 
 def parse_input(file_path)
