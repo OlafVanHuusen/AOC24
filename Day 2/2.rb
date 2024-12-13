@@ -5,7 +5,7 @@ def main
 end
 
 def task1(reports)
-  puts reports.reduce(0) { |sum, report| sum + (report.each_cons(2).reduce([true, 0]) { |acc, (a, b)| [acc[0] && ((a - b).abs <= 3) && ((acc[1] == 0)  || ((acc[1] == 1) ? a < b : b < a)), (a < b ? 1 : 2)] }[0] ? 1 : 0) } - 1
+  puts reports.reduce(0) { |sum, report| sum + (report.each_cons(2).reduce([true, 0]) { |acc, (a, b)| [acc[0] && ((a - b).abs <= 3) && (((acc[1] == 0) && (a != b)  || ((acc[1] == 1)) ? a < b : b < a)), (a < b ? 1 : 2)] }[0] ? 1 : 0) }
 end
 
 def task2(reports)
