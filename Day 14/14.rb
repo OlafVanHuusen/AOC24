@@ -6,6 +6,7 @@ def main
   puts part2(matrix)
 end
 
+
 def part2(matrix)
   maxRobotsInOneQuadrant = 0
   stepWithMaxRobots = 0
