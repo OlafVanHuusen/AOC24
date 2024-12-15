@@ -10,6 +10,7 @@ end
 def part2(matrix)
   maxRobotsInOneQuadrant = 0
   stepWithMaxRobots = 0
+  maxCoverage = 0
   i = 0
   10000.times do
     i += 1
@@ -18,11 +19,21 @@ def part2(matrix)
     quadrants.each do |quadrant|
       if quadrant.length > maxRobotsInOneQuadrant
         maxRobotsInOneQuadrant = quadrant.length
-        stepWithMaxRobots = i
+        #stepWithMaxRobots = i
       end
     end
+    #coverage = calculateCoverage(matrix)
+    #if coverage > maxCoverage
+      #maxCoverage = coverage
+      #stepWithMaxRobots = i
+    #end
   end
   stepWithMaxRobots
+end
+
+def calculateCoverage(matrix)
+  cordsWithRobots = matrix.map { |robot| robot[0] }.to_set
+  cordsWithRobots.length
 end
 
 def printMatrix(matrix)
