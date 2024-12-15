@@ -128,9 +128,6 @@ def make_moves(warehouse, robot, moves)
         next
       end
     end
-    #puts("\n")
-    #puts(move)
-    #print_warehouse(warehouse)
   end
 end
 
