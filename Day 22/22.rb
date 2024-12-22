@@ -8,7 +8,7 @@ def main
   prices.map! { |price_list| price_list[1..-1] }
   hashmap = create_hashmap(changes, prices)
   puts hashmap.values.max
-  puts hashmap.sort_by { |_, v| v }.first(100).to_h
+  puts hashmap.sort_by { |_, v| -v }.first(100).to_h
 end
 
 def create_hashmap(changes, prices)
@@ -44,11 +44,11 @@ def get_changes(prices)
   changes
 end
 
-def calculate_prices_from_numbers(prices)
-  prices.each do |price_list|
+def calculate_prices_from_numbers(numbers)
+  numbers.each do |price_list|
     price_list.map! { |price| price % 10 }
   end
-  prices
+  numbers
 end
 
 def create_full_buyer_numbers(prices)
