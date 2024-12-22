@@ -1,17 +1,14 @@
 require 'aoc_utils'
 
 def main
-  #start_time = Time.now
   numbers = AocUtils.read_ints('Day 22/input.txt')
-  prices = create_full_buyer_prices(numbers)
-  prices = calculate_prices_from_numbers(prices)
+  buyer_numbers = create_full_buyer_numbers(numbers)
+  prices = calculate_prices_from_numbers(buyer_numbers)
   changes = get_changes(prices)
   prices.map! { |price_list| price_list[1..-1] }
-  start_time = Time.now
   hashmap = create_hashmap(changes, prices)
   puts hashmap.values.max
-  puts Time.now - start_time
-  #puts Time.now - start_time
+  puts hashmap.sort_by { |_, v| v }.first(100).to_h
 end
 
 def create_hashmap(changes, prices)
@@ -54,7 +51,7 @@ def calculate_prices_from_numbers(prices)
   prices
 end
 
-def create_full_buyer_prices(prices)
+def create_full_buyer_numbers(prices)
   2000.times do
     prices.each do |price_list|
       price_list.append(calculate_next_number(price_list[-1]))
