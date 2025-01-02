@@ -1,5 +1,5 @@
 def main
-  @matrix = parse_input(File.read('utils/input.txt'))
+  @matrix = parse_input(File.read('nytis_executor/input.txt'))
   @registers = { '🟨' => 0, '🟩' => 0, '🟦' => 0, '🟪' => 0 }
   @instruction_pointer = [0, 0]
   @direction = 'down'
@@ -82,7 +82,7 @@ def human_readable(instruction)
     end
   end
   if hr == ""
-    puts "Output: #{@output}"
+    #puts "Output: #{@output}"
     raise "Invalid instruction: #{instruction}"
   end
   hr
@@ -243,6 +243,9 @@ end
 def negation
   dest = @instruction[3]
   @registers[dest] = ~@registers[dest]
+  if @registers[dest] < 0
+    @registers[dest] += 256
+  end
 end
 
 def reverse
